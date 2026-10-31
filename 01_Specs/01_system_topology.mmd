@@ -1,0 +1,11 @@
+graph TD
+    A["CHI-Bench Benchmark Runner EHR FHIR Stream"] --> B["PHANToM Grid Healthcare Orchestrator"]
+    B --> C["Track A: Outer Shell FSM runner.py"]
+    B --> D["Track B: Sovereign Healthcare Core chi_bench_healthcare_agent_core.py"]
+    D --> E["MCP Healthcare Tool Gateway 87+ Tools"]
+    E --> F["Provider Prior Authorization PA Engine"]
+    E --> G["Payer Utilization Management UM Engine"]
+    E --> H["Population Care Management Care Plan Engine"]
+    D --> I["ASIL-D 50.0 GB VRAM Circuit Breaker"]
+    D --> J["2-Pass ZDR Memory Purger 0xAA to 0x00"]
+    C --> K["Official Submission Packet & Audit Receipts"]

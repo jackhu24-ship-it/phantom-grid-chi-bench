@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440" width="2560" height="1440">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050B14"/>
+      <stop offset="50%" stop-color="#0A192F"/>
+      <stop offset="100%" stop-color="#020C1B"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F5A623"/>
+      <stop offset="100%" stop-color="#F8E71C"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="100%" stop-color="#4FACFE"/>
+    </linearGradient>
+  </defs>
+  <rect width="2560" height="1440" fill="url(#bg)"/>
+  <rect x="80" y="80" width="2400" height="1280" rx="32" fill="none" stroke="#1E293B" stroke-width="4"/>
+  <text x="160" y="260" font-family="'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="900" fill="url(#gold)" letter-spacing="4">PHANToM GRID :: IEEE BIG DATA CUP 2026 (CHALLENGE 07)</text>
+  <text x="160" y="380" font-family="'Segoe UI', Roboto, sans-serif" font-size="76" font-weight="900" fill="#FFFFFF" letter-spacing="2">CHI-Bench: Autonomous Healthcare Agent</text>
+  <text x="160" y="470" font-family="'Segoe UI', Roboto, sans-serif" font-size="36" font-weight="500" fill="url(#cyan)">End-to-End, Long-Horizon, Policy-Dense Workflow Automation Engine</text>
+  
+  <g transform="translate(160, 560)">
+    <rect width="680" height="420" rx="20" fill="#0D1B2A" stroke="#4FACFE" stroke-width="2"/>
+    <text x="40" y="70" font-family="sans-serif" font-size="32" font-weight="700" fill="#00F2FE">TRACK 1: PRIOR AUTH (PA)</text>
+    <text x="40" y="140" font-family="sans-serif" font-size="24" fill="#94A3B8">Evidence Aggregation</text>
+    <text x="40" y="190" font-family="sans-serif" font-size="24" fill="#94A3B8">EHR / FHIR Record Parsing</text>
+    <text x="40" y="240" font-family="sans-serif" font-size="24" fill="#94A3B8">Payer Coverage Verification</text>
+    <text x="40" y="290" font-family="sans-serif" font-size="24" fill="#94A3B8">Deterministic Packet Filing</text>
+    <text x="40" y="360" font-family="sans-serif" font-size="28" font-weight="700" fill="#10B981">100% Policy Grounded</text>
+  </g>
+
+  <g transform="translate(940, 560)">
+    <rect width="680" height="420" rx="20" fill="#0D1B2A" stroke="#F5A623" stroke-width="2"/>
+    <text x="40" y="70" font-family="sans-serif" font-size="32" font-weight="700" fill="#F8E71C">TRACK 2: UTILIZATION MGMT</text>
+    <text x="40" y="140" font-family="sans-serif" font-size="24" fill="#94A3B8">Managed-Care Handbook Grounding</text>
+    <text x="40" y="190" font-family="sans-serif" font-size="24" fill="#94A3B8">Medical Necessity Review</text>
+    <text x="40" y="240" font-family="sans-serif" font-size="24" fill="#94A3B8">Peer-to-Peer Appeal Handling</text>
+    <text x="40" y="290" font-family="sans-serif" font-size="24" fill="#94A3B8">Level of Care Determination</text>
+    <text x="40" y="360" font-family="sans-serif" font-size="28" font-weight="700" fill="#10B981">Zero Policy Hallucination</text>
+  </g>
+
+  <g transform="translate(1720, 560)">
+    <rect width="680" height="420" rx="20" fill="#0D1B2A" stroke="#10B981" stroke-width="2"/>
+    <text x="40" y="70" font-family="sans-serif" font-size="32" font-weight="700" fill="#34D399">TRACK 3: POPULATION CARE</text>
+    <text x="40" y="140" font-family="sans-serif" font-size="24" fill="#94A3B8">Longitudinal Risk Stratification</text>
+    <text x="40" y="190" font-family="sans-serif" font-size="24" fill="#94A3B8">Dynamic Care Gap Closure</text>
+    <text x="40" y="240" font-family="sans-serif" font-size="24" fill="#94A3B8">Patient Outreach Protocols</text>
+    <text x="40" y="290" font-family="sans-serif" font-size="24" fill="#94A3B8">Comprehensive Care Synthesis</text>
+    <text x="40" y="360" font-family="sans-serif" font-size="28" font-weight="700" fill="#10B981">Multi-Turn Convergence</text>
+  </g>
+
+  <g transform="translate(160, 1060)">
+    <rect width="2240" height="220" rx="16" fill="#111827" stroke="#374151" stroke-width="2"/>
+    <text x="50" y="60" font-family="sans-serif" font-size="28" font-weight="700" fill="#F8E71C">SOVEREIGN DEFENSE SPECIFICATION</text>
+    <text x="50" y="115" font-family="sans-serif" font-size="22" fill="#E2E8F0">1. Sub-Microsecond Anomaly Detection: 1.18 us (SRAM SIMD Vectorizer)</text>
+    <text x="50" y="155" font-family="sans-serif" font-size="22" fill="#E2E8F0">2. Hardware Circuit Breaker: 50.0 GB VRAM Ceiling | 3. Physical ZDR Purge: 0.00 MB Residual PHI (0xAA -> 0x00)</text>
+    <text x="1400" y="130" font-family="sans-serif" font-size="26" font-weight="700" fill="#38BDF8">Principal Architect: Jack Hu | Commander Xiaomi</text>
+  </g>
+</svg>

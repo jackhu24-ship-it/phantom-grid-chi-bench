@@ -1,0 +1,14 @@
+stateDiagram-v2
+    [*] --> STANDBY: Power-On Initialization & Memory Pinning
+    STANDBY --> CASE_INGESTION: Ingest Clinical Case & Patient Demographics
+    CASE_INGESTION --> TELEMETRY_AUDIT: SRAM Bio-Anomaly Detection (<=1.85us)
+    TELEMETRY_AUDIT --> POLICY_GROUNDING: Match 1290+ Managed-Care Guidelines
+    POLICY_GROUNDING --> MCP_TOOL_EXECUTION: Invoke Role-Scoped MCP Healthcare Tools
+    MCP_TOOL_EXECUTION --> FUSE_MONITOR: Dynamic VRAM Watchdog Check
+    FUSE_MONITOR --> MCP_TOOL_EXECUTION: Memory Nominal (< 50.0 GB)
+    FUSE_MONITOR --> CIRCUIT_BREAKER: Memory Exceeded (>= 50.0 GB Emergency Trip)
+    MCP_TOOL_EXECUTION --> CONVERGENCE_EVAL: Check Evidence Sufficiency & Criteria
+    CONVERGENCE_EVAL --> MCP_TOOL_EXECUTION: Missing Data (RFI / Peer-to-Peer Appeal)
+    CONVERGENCE_EVAL --> TERMINAL_DECISION: Issue Formal Prior Auth / UM / Care Plan
+    TERMINAL_DECISION --> ZDR_PURGE: Execute 2-Pass Physical Memory Wipe (0xAA to 0x00)
+    ZDR_PURGE --> [*]: Cryptographic Receipt Sealed (0.00MB Residue)

@@ -1,0 +1,21 @@
+# CHI-Bench Official Submission Configuration
+id: "phantom-grid-sovereign-health"
+team: "PHANToM GRID Sovereign Architecture Labs"
+contact: "jackhu24@gmail.com"
+lead: "Jack Hu (HU JIUN REN)"
+agent:
+  name: "PG-MOD-28-CHI"
+  description: "Autonomous Sovereign Bio-Edge Agent for Long-Horizon Healthcare Workflows"
+  architecture: "Dual-Track Deterministic State Machine x MCP Healthcare Gateway"
+  model: "sovereign-deterministic-hybrid"
+run:
+  eval_mode: "pass@1"
+  consistency_trials: 3
+  domains:
+    - "provider_prior_authorization"
+    - "payer_utilization_management"
+    - "population_care_management"
+safety:
+  vram_ceiling_gb: 50.0
+  zdr_memory_purge_pattern: "0xAA -> 0x00"
+  target_residual_mb: 0.000000

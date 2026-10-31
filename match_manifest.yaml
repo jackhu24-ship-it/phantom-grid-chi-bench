@@ -1,0 +1,23 @@
+tournament_id: 202611_IEEE_BigData_CHI_Bench
+title: 'IEEE Big Data Cup 2026 Challenge 07: CHI-Bench (χ-Bench)'
+subtitle: Can AI Agents Automate End-to-End, Long-Horizon, Policy-Rich Healthcare
+  Workflows?
+platform: Kaggle & Actava AI Leaderboard
+competition_slug: chi-bench
+url: https://www.kaggle.com/competitions/chi-bench
+github_repo: https://github.com/actava-ai/chi-bench
+prize_pool: ',000 USD'
+submission_deadline: '2026-11-15T23:59:00Z'
+team_count: 19
+user_has_entered: true
+principal_architect: Jack Hu (HU JIUN REN)
+contact: jackhu24@gmail.com
+status: PREPARED_READY_FOR_DEPLOYMENT
+solution_architecture:
+  core_module: PG-MOD-28 (Autonomous Bio-Edge Health Guard)
+  domains:
+  - Provider Prior Authorization
+  - Payer Utilization Management
+  - Population Care Management
+  protocol: Model Context Protocol (MCP) Healthcare Tool Invocation
+  metrics: pass@1 & pass^3 strict policy compliance

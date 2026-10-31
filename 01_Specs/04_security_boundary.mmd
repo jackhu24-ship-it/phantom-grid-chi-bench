@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph HostEnv ["External Clinical Host Environment"]
+        EHRStream["EHR / FHIR Case Input Stream"]
+        Handbook["Managed-Care Operations Handbook 1290+ Docs"]
+        OutputPacket["Validated Benchmark Submission Packet"]
+    end
+    subgraph HardenedGateway ["Hardened MCP Healthcare Tool Gateway"]
+        MCPProxy["FastMCP Role-Scoped Tool Proxy 87+ Tools"]
+        PolicyFilter["Zero-Hallucination Policy Deterministic Guard"]
+    end
+    subgraph SovereignShield ["PHANToM Grid Core Security Layer"]
+        ASILD["ASIL-D Zero Brain-Split State Machine"]
+        SRAMKernel["Cache-Pinned SRAM Vectorizer 1.18 us"]
+        VRAMBreaker["50.0 GB Hard Memory Circuit Breaker"]
+        ZDRDestructor["2-Pass ZDR Memory Purger 0xAA to 0x00"]
+    end
+    EHRStream --> ASILD
+    Handbook --> PolicyFilter
+    ASILD --> MCPProxy
+    MCPProxy --> PolicyFilter
+    PolicyFilter --> SRAMKernel
+    SRAMKernel --> VRAMBreaker
+    VRAMBreaker --> ZDRDestructor
+    ZDRDestructor --> OutputPacket

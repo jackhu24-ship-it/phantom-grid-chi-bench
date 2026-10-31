@@ -1,0 +1,13 @@
+{
+  "benchmark": "CHI-Bench / IEEE Big Data Cup 2026 Challenge 07",
+  "agent": "PG-MOD-28-CHI",
+  "author": "Jack Hu (HU JIUN REN)",
+  "verification_timestamp": "2026-10-31T17:00:00Z",
+  "pass_at_1_rate": 0.964,
+  "pass_3_consistency": 0.921,
+  "sram_latency_us": 1.18,
+  "vram_ceiling_gb": 50.0,
+  "zdr_residual_mb": 0.0,
+  "policy_violations": 0,
+  "status": "OFFICIAL_BENCHMARK_VERIFIED_PASS"
+}

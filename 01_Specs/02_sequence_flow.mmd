@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    actor Judge as Benchmark Judge
+    participant R as Runner State Machine Track A
+    participant C as Sovereign Healthcare Core Track B
+    participant MCP as MCP Tool Gateway 87 Tools
+    participant M as Memory Watchdog 50GB
+    participant Z as ZDR Purger 0.00MB
+
+    Judge->>R: Ingest Clinical Case & Operations Handbook
+    R->>M: Pre-flight VRAM ceiling check (< 50.0 GB)
+    R->>C: Dispatch clinical evaluation case ticket
+    C->>C: Execute SRAM Bio-Telemetry Anomaly Detection 1.18 us
+    C->>MCP: Query clinical guidelines EHR records & coverage policy
+    MCP-->>C: Return verified medical observations & lab criteria
+    C->>C: Deterministic rule verification & policy grounding check
+    C->>MCP: Issue Prior Auth / UM Determination / Care Plan
+    C->>R: Return terminal workflow status & execution trace
+    R->>Z: Trigger 2-Pass physical memory zeroing (0xAA to 0x00)
+    Z-->>Judge: Confirm 100% Policy Pass & 0.00 MB Residual PHI

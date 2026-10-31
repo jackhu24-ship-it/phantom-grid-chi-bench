@@ -1,0 +1,13 @@
+{
+  "release_id": "REL-CHI-BENCH-202611-v1.0",
+  "tournament": "IEEE Big Data Cup 2026 Challenge 07: CHI-Bench",
+  "artifacts": [
+    "01_Specs/SPEC_CHI_BENCH_HEALTHCARE_AGENT.md",
+    "02_SourceCode/chi_bench_healthcare_agent_core.py",
+    "02_SourceCode/runner.py",
+    "04_Slides_PDF/slides.pdf",
+    "07_SubmissionPackage/Official_Submission_Copy_Package.md",
+    "08_AuditReceipts/audit_receipt.json"
+  ],
+  "verification_seal": "RELEASE_SEAL_JACK_HU_CO_SIGNED_XIAOMI"
+}

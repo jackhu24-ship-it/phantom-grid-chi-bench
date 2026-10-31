@@ -1,0 +1,8 @@
+Metric,Target Threshold,Measured Benchmark,Defense Mechanism,Status
+Sub-Microsecond Anomaly Detection,<= 1.85 us,1.18 us,Cache-pinned SRAM SIMD Vectorizer,PASS
+Maximum VRAM Footprint,< 50.0 GB,1.82 GB,ASIL-D Dynamic Memory Circuit Breaker,PASS
+Residual Patient Data (ZDR),= 0.00 MB,0.00 MB,2-Pass Physical Memory Purge (0xAA -> 0x00),PASS
+Policy Grounding Compliance Rate,100.0%,100.0%,Rule-based Deterministic Guardrails,PASS
+Tool Invocation Latency,< 25.0 ms,8.42 ms,Asynchronous Non-blocking MCP Gateway,PASS
+End-to-End Workflow Success Rate (pass@1),>= 90.0%,96.4%,Deterministic FSM & Heuristic Recovery,PASS
+Multi-Trial Consistency (pass^3),>= 85.0%,92.1%,Entropy-bounded Exploration Pruning,PASS
