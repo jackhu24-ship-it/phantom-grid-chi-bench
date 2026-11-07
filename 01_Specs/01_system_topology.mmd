@@ -1,11 +1,37 @@
-graph TD
-    A["CHI-Bench Benchmark Runner EHR FHIR Stream"] --> B["PHANToM Grid Healthcare Orchestrator"]
-    B --> C["Track A: Outer Shell FSM runner.py"]
-    B --> D["Track B: Sovereign Healthcare Core chi_bench_healthcare_agent_core.py"]
-    D --> E["MCP Healthcare Tool Gateway 87+ Tools"]
-    E --> F["Provider Prior Authorization PA Engine"]
-    E --> G["Payer Utilization Management UM Engine"]
-    E --> H["Population Care Management Care Plan Engine"]
-    D --> I["ASIL-D 50.0 GB VRAM Circuit Breaker"]
-    D --> J["2-Pass ZDR Memory Purger 0xAA to 0x00"]
-    C --> K["Official Submission Packet & Audit Receipts"]
+flowchart TD
+    classDef core fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc;
+    classDef gateway fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef safety fill:#18181b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+
+    subgraph Host ["External Healthcare Host & Evaluation Boundary"]
+        BenchmarkRunner["CHI-Bench Official Benchmark Runner (EHR / FHIR)"]:::gateway
+        HandbookCorpus["1,290+ Managed-Care Operations Handbooks"]:::gateway
+    end
+
+    subgraph Orchestration ["PHANToM GRID Dual-Track Orchestrator"]
+        TrackA["Track A: Outer Shell FSM (runner.py)"]:::core
+        TrackB["Track B: Sovereign Healthcare Core (chi_bench_healthcare_agent_core.py)"]:::core
+    end
+
+    subgraph ToolMesh ["FastMCP Clinical Tool Gateway (87+ Tools)"]
+        EnginePA["Provider Prior Authorization (PA Engine)"]:::core
+        EngineUM["Payer Utilization Management (UM Engine)"]:::core
+        EngineCare["Population Care Management (Care Plan Engine)"]:::core
+    end
+
+    subgraph DefenseEnclosure ["ASIL-D Sovereign Defense & Zero-Residual Enclosure"]
+        SRAMAnomaly["SRAM Bio-Telemetry SIMD Vectorizer (1.18us)"]:::safety
+        VRAMBreaker["50.0 GB Hardware VRAM Circuit Breaker"]:::safety
+        ZDRPurger["2-Pass ZDR Memory Purger (0xAA -> 0x00, 0.00MB PHI)"]:::safety
+        WORMAudit["Cryptographic WORM Verification Receipt Generator"]:::safety
+    end
+
+    BenchmarkRunner --> TrackA
+    HandbookCorpus --> TrackB
+    TrackA <--> TrackB
+    TrackB --> ToolMesh
+    TrackB --> SRAMAnomaly
+    ToolMesh --> VRAMBreaker
+    VRAMBreaker --> ZDRPurger
+    ZDRPurger --> WORMAudit
+    WORMAudit --> BenchmarkRunner

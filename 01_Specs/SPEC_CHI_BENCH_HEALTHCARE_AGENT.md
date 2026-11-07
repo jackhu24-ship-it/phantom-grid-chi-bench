@@ -56,65 +56,154 @@ PHANToM_GRID_CHI_BENCH_HEALTHCARE_MESH
 
 ---
 
-## 📐 3. Diagram I: System Architecture Topology (系統架構拓撲圖)
+## 🔀 2.5 Diagram 0: End-to-End Clinical Decision & Operations Flowchart (端到端臨床決策與作業流程圖)
+
+![Clinical Decision & Operations Flowchart](diagrams/00_clinical_workflow_flowchart.png)
 
 ```mermaid
-graph TD
-    A["CHI-Bench Benchmark Runner EHR FHIR Stream"] --> B["PHANToM Grid Healthcare Orchestrator"]
-    B --> C["Track A: Outer Shell FSM runner.py"]
-    B --> D["Track B: Sovereign Healthcare Core chi_bench_healthcare_agent_core.py"]
-    D --> E["MCP Healthcare Tool Gateway 87+ Tools"]
-    E --> F["Provider Prior Authorization PA Engine"]
-    E --> G["Payer Utilization Management UM Engine"]
-    E --> H["Population Care Management Care Plan Engine"]
-    D --> I["ASIL-D 50.0 GB VRAM Circuit Breaker"]
-    D --> J["2-Pass ZDR Memory Purger 0xAA to 0x00"]
-    C --> K["Official Submission Packet & Audit Receipts"]
+flowchart TD
+    classDef startEnd fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef process fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc;
+    classDef decision fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+    classDef passNode fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef failNode fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#f8fafc;
+    classDef safety fill:#18181b,stroke:#f59e0b,stroke-width:2px,color:#fde68a;
+
+    subgraph Phase1 ["01. Inbound Case Ingestion & Anomaly Triage"]
+        CaseIn(["Inbound Patient Case Stream (FHIR R4 JSON)"]):::startEnd
+        SRAMScan["SRAM Bio-Telemetry SIMD Vectorizer (1.18us)"]:::process
+        TroponinCheck{"Troponin-T Acute Elevation > 0.04 ng/mL?"}:::decision
+    end
+
+    subgraph Phase2 ["02. Deterministic Policy Verification & Guideline Grounding"]
+        PolicyMatch["Match 1,290+ Managed-Care Operations Handbooks"]:::process
+        MCGCheck{"Concordance with Milliman Care Guidelines (MCG-AC-041)?"}:::decision
+        CriteriaCheck{"All 3 Clinical Indicators Satisfied?\\n- Refractory Angina > 30 Days\\n- Treadmill ST Depression > 2.1mm\\n- Failed Medical Anti-Ischemic Therapy"}:::decision
+    end
+
+    subgraph Phase3 ["03. Adjudication & FastMCP Electronic Dispatch"]
+        AutoApprove["FastMCP Adjudication Engine: PRIOR AUTH APPROVED"]:::passNode
+        IssueOrder["Issue Electronic Order: AUTH #PA-2026-CHI-9921 (8.42ms)"]:::passNode
+        PeerReview["Clinical RFI / Peer-to-Peer Appeal Dispatch"]:::failNode
+    end
+
+    subgraph Phase4 ["04. ASIL-D Safety Interlock & Cryptographic Closure"]
+        VRAMGuard{"Hardware Watchdog: Peak VRAM <= 50.0 GB?"}:::safety
+        ZDRScrub["2-Pass ZDR Memory Purge (0xAA -> 0x00, 0.00MB PHI Residue)"]:::safety
+        CircuitBreaker["ASIL-D Hardware Fuse Trips: Terminate Sub-process"]:::failNode
+        WORMReceipt(["Cryptographic WORM Audit Receipt Sealed (SHA-256)"]):::startEnd
+    end
+
+    CaseIn --> SRAMScan
+    SRAMScan --> TroponinCheck
+    TroponinCheck -- Urgent Cath Required --> PolicyMatch
+    TroponinCheck -- Normal Vitals --> FallbackRoutine["Standard Ambulatory Triage"]:::process
+    PolicyMatch --> MCGCheck
+    MCGCheck -- Guideline Matched --> CriteriaCheck
+    MCGCheck -- Unmatched --> PeerReview
+    CriteriaCheck -- 100% Concordance --> AutoApprove
+    CriteriaCheck -- Insufficient Evidence --> PeerReview
+    AutoApprove --> IssueOrder
+    IssueOrder --> VRAMGuard
+    VRAMGuard -- Safe (< 50GB) --> ZDRScrub
+    VRAMGuard -- Breach (>= 50GB) --> CircuitBreaker
+    CircuitBreaker --> ZDRScrub
+    ZDRScrub --> WORMReceipt
+```
+
+---
+
+## 📐 3. Diagram I: System Architecture Topology (系統架構拓撲圖)
+
+![System Architecture Topology](diagrams/01_system_topology.png)
+
+```mermaid
+flowchart TD
+    classDef core fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc;
+    classDef gateway fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef safety fill:#18181b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+
+    subgraph Host ["External Healthcare Host & Evaluation Boundary"]
+        BenchmarkRunner["CHI-Bench Official Benchmark Runner (EHR / FHIR)"]:::gateway
+        HandbookCorpus["1,290+ Managed-Care Operations Handbooks"]:::gateway
+    end
+
+    subgraph Orchestration ["PHANToM GRID Dual-Track Orchestrator"]
+        TrackA["Track A: Outer Shell FSM (runner.py)"]:::core
+        TrackB["Track B: Sovereign Healthcare Core (chi_bench_healthcare_agent_core.py)"]:::core
+    end
+
+    subgraph ToolMesh ["FastMCP Clinical Tool Gateway (87+ Tools)"]
+        EnginePA["Provider Prior Authorization (PA Engine)"]:::core
+        EngineUM["Payer Utilization Management (UM Engine)"]:::core
+        EngineCare["Population Care Management (Care Plan Engine)"]:::core
+    end
+
+    subgraph DefenseEnclosure ["ASIL-D Sovereign Defense & Zero-Residual Enclosure"]
+        SRAMAnomaly["SRAM Bio-Telemetry SIMD Vectorizer (1.18us)"]:::safety
+        VRAMBreaker["50.0 GB Hardware VRAM Circuit Breaker"]:::safety
+        ZDRPurger["2-Pass ZDR Memory Purger (0xAA -> 0x00, 0.00MB PHI)"]:::safety
+        WORMAudit["Cryptographic WORM Verification Receipt Generator"]:::safety
+    end
+
+    BenchmarkRunner --> TrackA
+    HandbookCorpus --> TrackB
+    TrackA <--> TrackB
+    TrackB --> ToolMesh
+    TrackB --> SRAMAnomaly
+    ToolMesh --> VRAMBreaker
+    VRAMBreaker --> ZDRPurger
+    ZDRPurger --> WORMAudit
+    WORMAudit --> BenchmarkRunner
 ```
 
 ---
 
 ## ⏱️ 4. Diagram II: Sequence Flow & Protocol Interaction (時序交互流動圖)
 
+![Sequence Flow](diagrams/02_sequence_flow.png)
+
 ```mermaid
 sequenceDiagram
     autonumber
     actor Judge as Benchmark Judge
-    participant R as Runner State Machine Track A
-    participant C as Sovereign Healthcare Core Track B
-    participant MCP as MCP Tool Gateway 87 Tools
-    participant M as Memory Watchdog 50GB
-    participant Z as ZDR Purger 0.00MB
+    participant R as Track A Runner FSM
+    participant C as Track B Healthcare Core
+    participant MCP as FastMCP Tool Gateway (87 Tools)
+    participant M as Hardware Watchdog (50GB)
+    participant Z as ZDR Memory Purger (0.00MB)
 
-    Judge->>R: Ingest Clinical Case & Operations Handbook
-    R->>M: Pre-flight VRAM ceiling check (< 50.0 GB)
+    Judge->>R: Ingest Clinical Case and Operations Handbook
+    R->>M: Pre-flight VRAM ceiling check (under 50.0 GB)
     R->>C: Dispatch clinical evaluation case ticket
-    C->>C: Execute SRAM Bio-Telemetry Anomaly Detection 1.18 us
-    C->>MCP: Query clinical guidelines EHR records & coverage policy
-    MCP-->>C: Return verified medical observations & lab criteria
-    C->>C: Deterministic rule verification & policy grounding check
+    C->>C: Execute SRAM Bio-Telemetry Anomaly Detection (1.18us)
+    C->>MCP: Query clinical guidelines EHR records and coverage policy
+    MCP-->>C: Return verified medical observations and lab criteria
+    C->>C: Deterministic rule verification and policy grounding check
     C->>MCP: Issue Prior Auth / UM Determination / Care Plan
-    C->>R: Return terminal workflow status & execution trace
+    C->>R: Return terminal workflow status and execution trace
     R->>Z: Trigger 2-Pass physical memory zeroing (0xAA to 0x00)
-    Z-->>Judge: Confirm 100% Policy Pass & 0.00 MB Residual PHI
+    Z-->>Judge: Confirm 100% Policy Pass and 0.00 MB Residual PHI
 ```
 
 ---
 
 ## 🔄 5. Diagram III: State Machine Transitions (有限狀態機轉換圖)
 
+![State Machine Transitions](diagrams/03_state_machine.png)
+
 ```mermaid
 stateDiagram-v2
-    [*] --> STANDBY: Power-On Initialization & Memory Pinning
-    STANDBY --> CASE_INGESTION: Ingest Clinical Case & Patient Demographics
-    CASE_INGESTION --> TELEMETRY_AUDIT: SRAM Bio-Anomaly Detection (<=1.85us)
+    [*] --> STANDBY: Power-On Initialization and Memory Pinning
+    STANDBY --> CASE_INGESTION: Ingest Clinical Case and Patient Demographics
+    CASE_INGESTION --> TELEMETRY_AUDIT: SRAM Bio-Anomaly Detection (under 1.85us)
     TELEMETRY_AUDIT --> POLICY_GROUNDING: Match 1290+ Managed-Care Guidelines
     POLICY_GROUNDING --> MCP_TOOL_EXECUTION: Invoke Role-Scoped MCP Healthcare Tools
     MCP_TOOL_EXECUTION --> FUSE_MONITOR: Dynamic VRAM Watchdog Check
-    FUSE_MONITOR --> MCP_TOOL_EXECUTION: Memory Nominal (< 50.0 GB)
-    FUSE_MONITOR --> CIRCUIT_BREAKER: Memory Exceeded (>= 50.0 GB Emergency Trip)
-    MCP_TOOL_EXECUTION --> CONVERGENCE_EVAL: Check Evidence Sufficiency & Criteria
-    CONVERGENCE_EVAL --> MCP_TOOL_EXECUTION: Missing Data (RFI / Peer-to-Peer Appeal)
+    FUSE_MONITOR --> MCP_TOOL_EXECUTION: Memory Nominal (under 50.0 GB)
+    FUSE_MONITOR --> CIRCUIT_BREAKER: Memory Exceeded (50.0 GB Emergency Trip)
+    MCP_TOOL_EXECUTION --> CONVERGENCE_EVAL: Check Evidence Sufficiency and Criteria
+    CONVERGENCE_EVAL --> MCP_TOOL_EXECUTION: Missing Data (RFI / Appeal)
     CONVERGENCE_EVAL --> TERMINAL_DECISION: Issue Formal Prior Auth / UM / Care Plan
     TERMINAL_DECISION --> ZDR_PURGE: Execute 2-Pass Physical Memory Wipe (0xAA to 0x00)
     ZDR_PURGE --> [*]: Cryptographic Receipt Sealed (0.00MB Residue)
@@ -124,23 +213,30 @@ stateDiagram-v2
 
 ## 🛡️ 6. Diagram IV: Security Boundary & Defense Enclosure (安全隔離與邊界防禦圖)
 
+![Security Boundary](diagrams/04_security_boundary.png)
+
 ```mermaid
 flowchart LR
+    classDef host fill:#0f172a,stroke:#475569,stroke-width:2px,color:#f8fafc;
+    classDef gate fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#f8fafc;
+    classDef core fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+
     subgraph HostEnv ["External Clinical Host Environment"]
-        EHRStream["EHR / FHIR Case Input Stream"]
-        Handbook["Managed-Care Operations Handbook 1290+ Docs"]
-        OutputPacket["Validated Benchmark Submission Packet"]
+        EHRStream["EHR / FHIR Case Input Stream"]:::host
+        Handbook["Managed-Care Operations Handbook (1,290+ Docs)"]:::host
+        OutputPacket["Validated Benchmark Submission Packet"]:::host
     end
-    subgraph HardenedGateway ["Hardened MCP Healthcare Tool Gateway"]
-        MCPProxy["FastMCP Role-Scoped Tool Proxy 87+ Tools"]
-        PolicyFilter["Zero-Hallucination Policy Deterministic Guard"]
+    subgraph HardenedGateway ["Hardened FastMCP Clinical Gateway"]
+        MCPProxy["FastMCP Role-Scoped Tool Proxy (87+ Tools)"]:::gate
+        PolicyFilter["Zero-Hallucination Policy Deterministic Guard"]:::gate
     end
     subgraph SovereignShield ["PHANToM Grid Core Security Layer"]
-        ASILD["ASIL-D Zero Brain-Split State Machine"]
-        SRAMKernel["Cache-Pinned SRAM Vectorizer 1.18 us"]
-        VRAMBreaker["50.0 GB Hard Memory Circuit Breaker"]
-        ZDRDestructor["2-Pass ZDR Memory Purger 0xAA to 0x00"]
+        ASILD["ASIL-D Zero Brain-Split State Machine"]:::core
+        SRAMKernel["Cache-Pinned SRAM Vectorizer (1.18us)"]:::core
+        VRAMBreaker["50.0 GB Hard Memory Circuit Breaker"]:::core
+        ZDRDestructor["2-Pass ZDR Memory Purger (0xAA -> 0x00)"]:::core
     end
+
     EHRStream --> ASILD
     Handbook --> PolicyFilter
     ASILD --> MCPProxy

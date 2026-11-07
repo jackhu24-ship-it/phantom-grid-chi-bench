@@ -1,0 +1,48 @@
+flowchart TD
+    classDef startEnd fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef process fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc;
+    classDef decision fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+    classDef passNode fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef failNode fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#f8fafc;
+    classDef safety fill:#18181b,stroke:#f59e0b,stroke-width:2px,color:#fde68a;
+
+    subgraph Phase1 ["01. Inbound Case Ingestion & Anomaly Triage"]
+        CaseIn(["Inbound Patient Case Stream (FHIR R4 JSON)"]):::startEnd
+        SRAMScan["SRAM Bio-Telemetry SIMD Vectorizer (1.18us)"]:::process
+        TroponinCheck{"Troponin-T Acute Elevation > 0.04 ng/mL?"}:::decision
+    end
+
+    subgraph Phase2 ["02. Deterministic Policy Verification & Guideline Grounding"]
+        PolicyMatch["Match 1,290+ Managed-Care Operations Handbooks"]:::process
+        MCGCheck{"Concordance with Milliman Care Guidelines (MCG-AC-041)?"}:::decision
+        CriteriaCheck{"All 3 Clinical Indicators Satisfied?\n- Refractory Angina > 30 Days\n- Treadmill ST Depression > 2.1mm\n- Failed Medical Anti-Ischemic Therapy"}:::decision
+    end
+
+    subgraph Phase3 ["03. Adjudication & FastMCP Electronic Dispatch"]
+        AutoApprove["FastMCP Adjudication Engine: PRIOR AUTH APPROVED"]:::passNode
+        IssueOrder["Issue Electronic Order: AUTH #PA-2026-CHI-9921 (8.42ms)"]:::passNode
+        PeerReview["Clinical RFI / Peer-to-Peer Appeal Dispatch"]:::failNode
+    end
+
+    subgraph Phase4 ["04. ASIL-D Safety Interlock & Cryptographic Closure"]
+        VRAMGuard{"Hardware Watchdog: Peak VRAM <= 50.0 GB?"}:::safety
+        ZDRScrub["2-Pass ZDR Memory Purge (0xAA -> 0x00, 0.00MB PHI Residue)"]:::safety
+        CircuitBreaker["ASIL-D Hardware Fuse Trips: Terminate Sub-process"]:::failNode
+        WORMReceipt(["Cryptographic WORM Audit Receipt Sealed (SHA-256)"]):::startEnd
+    end
+
+    CaseIn --> SRAMScan
+    SRAMScan --> TroponinCheck
+    TroponinCheck -- Urgent Cath Required --> PolicyMatch
+    TroponinCheck -- Normal Vitals --> FallbackRoutine["Standard Ambulatory Triage"]:::process
+    PolicyMatch --> MCGCheck
+    MCGCheck -- Guideline Matched --> CriteriaCheck
+    MCGCheck -- Unmatched --> PeerReview
+    CriteriaCheck -- 100% Concordance --> AutoApprove
+    CriteriaCheck -- Insufficient Evidence --> PeerReview
+    AutoApprove --> IssueOrder
+    IssueOrder --> VRAMGuard
+    VRAMGuard -- Safe (< 50GB) --> ZDRScrub
+    VRAMGuard -- Breach (>= 50GB) --> CircuitBreaker
+    CircuitBreaker --> ZDRScrub
+    ZDRScrub --> WORMReceipt
