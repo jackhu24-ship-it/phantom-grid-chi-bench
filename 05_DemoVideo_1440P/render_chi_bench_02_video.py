@@ -238,6 +238,13 @@ def render_chi_bench_02_video():
     print(f"[*] Total Master Duration: {total_duration:.2f}s (~{int(total_duration//60)}m {int(total_duration%60)}s)")
 
     print("[*] Capturing PG-SHOWCASE-02 2560x1440 QHD Keyframes via Playwright...")
+    print("[*] Purging legacy frame artifacts from scratch directory...")
+    for old_frame in scratch_dir.glob("frame_*.png"):
+        try:
+            old_frame.unlink()
+        except Exception:
+            pass
+
     frame_idx = 0
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -254,16 +261,16 @@ def render_chi_bench_02_video():
 
             n_frames = max(int(dur * FPS), 1)
 
-            # Move cursor and highlight target
-            try:
-                page.evaluate(f"moveCursorTo('{target_sel}', '{label_str}')")
-            except Exception as e:
-                print(f"[WARN] Error moving cursor to {target_sel}: {e}")
-
-            if should_click:
-                page.wait_for_timeout(200)
-
             for fi in range(n_frames):
+                progress_ratio = fi / max(n_frames - 1, 1)
+                try:
+                    page.evaluate(
+                        "([sel, lbl, pr, clk, sub]) => moveCursorDirectly(sel, lbl, pr, clk, sub)",
+                        [target_sel, label_str, progress_ratio, should_click, text]
+                    )
+                except Exception as e:
+                    print(f"[WARN] Error moving cursor to {target_sel} (frame {fi}): {e}")
+
                 frame_path = scratch_dir / f"frame_{frame_idx:06d}.png"
                 page.screenshot(path=str(frame_path))
                 frame_idx += 1

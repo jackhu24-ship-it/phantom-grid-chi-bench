@@ -38,15 +38,23 @@
     }
   </script>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background-color: #070a14;
       color: #e2e8f0;
       font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+      width: 2560px;
+      height: 1440px;
+      overflow: hidden;
+      position: relative;
     }
 
     .desk-card {
-      background: rgba(16, 25, 46, 0.85);
+      background: rgba(16, 25, 46, 0.88);
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(12px);
@@ -66,81 +74,126 @@
       animation: ping-subtle 2s infinite ease-in-out;
     }
 
-    /* Virtual Cursor */
+    /* Virtual Cursor: Zero transition delay for absolute lock-step frame accuracy */
     #virtual-cursor {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.08s ease-out;
+      z-index: 999999;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      transform: translate(1280px, 720px);
+      transition: none;
     }
     #virtual-cursor-icon {
-      width: 24px;
-      height: 24px;
-      background: radial-gradient(circle, #00F2FE 30%, rgba(0, 242, 254, 0.2) 70%);
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 0 15px #00F2FE, 0 0 30px #00F2FE;
+      width: 38px;
+      height: 38px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 28 28"><circle cx="6" cy="6" r="5" fill="rgba(0,242,254,0.4)"/><polygon points="4 4 4 23 9.8 17.2 14.8 23 17.5 21.8 12.5 16 20 16 4 4" fill="%23FFFFFF" stroke="%2300F2FE" stroke-width="2.2"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      filter: drop-shadow(0 0 14px #00F2FE);
+      flex-shrink: 0;
     }
     #virtual-cursor-label {
-      background: rgba(7, 10, 20, 0.9);
+      background: rgba(7, 10, 20, 0.96);
+      border: 1.5px solid #00F2FE;
+      color: #00F2FE;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 18px rgba(0, 242, 254, 0.4);
+      letter-spacing: 0.05em;
+    }
+
+    /* Target Highlighting */
+    .focus-target-active {
+      outline: 3px solid #00F2FE !important;
+      outline-offset: 4px;
+      box-shadow: 0 0 35px rgba(0, 242, 254, 0.5) !important;
+    }
+
+    /* Subtitle Banner */
+    #director-subtitle-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1400px;
+      background: rgba(10, 15, 30, 0.92);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 14px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 99990;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+    }
+    #director-sub-badge {
+      background: rgba(0, 242, 254, 0.15);
       border: 1px solid #00F2FE;
       color: #00F2FE;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       padding: 4px 10px;
       border-radius: 6px;
-      white-space: nowrap;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-      letter-spacing: 0.05em;
+      flex-shrink: 0;
     }
-
-    /* Highlight Pulse */
-    .focus-target-active {
-      outline: 2px solid #00F2FE !important;
-      outline-offset: 4px;
-      box-shadow: 0 0 30px rgba(0, 242, 254, 0.35) !important;
+    #director-sub-text {
+      color: #f8fafc;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+      flex: 1;
     }
   </style>
 </head>
-<body class="w-screen h-screen relative flex flex-col justify-between p-6 sm:p-8">
+<body class="p-8 flex flex-col justify-between">
 
-  <!-- Virtual Cursor -->
-  <div id="virtual-cursor" style="left: 960px; top: 540px;">
+  <!-- Virtual Pointer Cursor -->
+  <div id="virtual-cursor">
     <div id="virtual-cursor-icon"></div>
-    <div id="virtual-cursor-label">FOCUS</div>
+    <div id="virtual-cursor-label">FRONTIER :: CHI-BENCH CLINICAL INTELLIGENCE</div>
+  </div>
+
+  <!-- Teleprompter Subtitle Bar -->
+  <div id="director-subtitle-bar">
+    <div id="director-sub-badge">NARRATION</div>
+    <div id="director-sub-text">Welcome to PHANToM GRID. In this demonstration, we present our autonomous healthcare operations agent for the IEEE Big Data CHI-Bench challenge.</div>
   </div>
 
   <!-- ========================================================================= -->
   <!-- 1. TOP UTILITY & TELEMETRY HUD BAR                                       -->
   <!-- ========================================================================= -->
-  <header class="w-full z-20 flex justify-between items-center pb-4 border-b border-white/10">
-    <div class="flex items-center space-x-3.5">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan/25 to-brand-purple/25 border border-brand-cyan/40 flex items-center justify-center font-bold text-base text-brand-cyan font-mono shadow-lg shadow-brand-cyan/15">
+  <header id="desk-header" class="w-full z-20 flex justify-between items-center pb-4 border-b border-white/10">
+    <div class="flex items-center space-x-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-cyan/25 to-brand-purple/25 border border-brand-cyan/40 flex items-center justify-center font-bold text-lg text-brand-cyan font-mono shadow-lg shadow-brand-cyan/15">
         CHI
       </div>
       <div>
-        <div class="flex items-center space-x-2">
-          <span class="font-extrabold tracking-wider text-base sm:text-lg bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+        <div class="flex items-center space-x-3">
+          <span class="font-extrabold tracking-wider text-xl bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
             PHANToM GRID :: CLINICAL OPERATIONS DESK
           </span>
-          <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-brand-emerald/15 border border-brand-emerald/40 text-brand-emerald font-semibold flex items-center">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-ping mr-1"></span>
+          <span class="text-xs uppercase font-mono px-2.5 py-0.5 rounded-full bg-brand-emerald/15 border border-brand-emerald/40 text-brand-emerald font-semibold flex items-center">
+            <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping mr-1.5"></span>
             ASIL-D CERTIFIED
           </span>
-          <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-brand-cyan/15 border border-brand-cyan/40 text-brand-cyan font-semibold">
+          <span class="text-xs uppercase font-mono px-2.5 py-0.5 rounded-full bg-brand-cyan/15 border border-brand-cyan/40 text-brand-cyan font-semibold">
             PG-SHOWCASE-02 WORKBENCH
           </span>
         </div>
-        <p class="text-xs text-slate-400 font-mono flex items-center space-x-2 mt-0.5">
+        <p class="text-xs text-slate-400 font-mono flex items-center space-x-2 mt-1">
           <span>IEEE Big Data Cup 2026 Challenge 07 (CHI-Bench)</span>
           <span class="text-slate-600">|</span>
-          <span>SRAM Latency: <span class="text-brand-emerald font-bold">1.18 &mu;s</span></span>
+          <span>SRAM Latency: <span class="text-brand-emerald font-bold">1.18 &mu;s</span> (&le;1.85 &mu;s)</span>
           <span class="text-slate-600">|</span>
           <span>VRAM: <span class="text-brand-cyan font-bold">14.8 / 50.0 GB</span></span>
           <span class="text-slate-600">|</span>
@@ -150,20 +203,18 @@
     </div>
 
     <!-- Right Quick Counters -->
-    <div class="flex items-center space-x-4">
-      <div class="hidden lg:flex items-center space-x-3 text-xs font-mono">
-        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-cyan">
-          <span class="text-slate-400">Cases Ingested:</span>
-          <span class="text-white font-bold ml-1">1,290</span>
-        </div>
-        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-emerald">
-          <span class="text-slate-400">Pass@1 Concordance:</span>
-          <span class="text-brand-emerald font-bold ml-1">96.4%</span>
-        </div>
-        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-amber">
-          <span class="text-slate-400">Avg Decision:</span>
-          <span class="text-brand-amber font-bold ml-1">8.42 ms</span>
-        </div>
+    <div class="flex items-center space-x-3 text-xs font-mono">
+      <div class="desk-card px-4 py-2 rounded-xl border-l-2 border-brand-cyan">
+        <span class="text-slate-400">Cases Ingested:</span>
+        <span class="text-white font-bold ml-1.5 text-sm">1,290</span>
+      </div>
+      <div class="desk-card px-4 py-2 rounded-xl border-l-2 border-brand-emerald">
+        <span class="text-slate-400">Pass@1 Concordance:</span>
+        <span class="text-brand-emerald font-bold ml-1.5 text-sm">96.4%</span>
+      </div>
+      <div class="desk-card px-4 py-2 rounded-xl border-l-2 border-brand-amber">
+        <span class="text-slate-400">Decision Latency:</span>
+        <span class="text-brand-amber font-bold ml-1.5 text-sm">8.42 ms</span>
       </div>
     </div>
   </header>
@@ -171,63 +222,63 @@
   <!-- ========================================================================= -->
   <!-- 2. MAIN THREE-COLUMN CLINICAL DESK WORKSPACE                              -->
   <!-- ========================================================================= -->
-  <main class="w-full flex-1 grid grid-cols-12 gap-5 py-4 items-stretch overflow-hidden">
+  <main class="w-full flex-1 grid grid-cols-12 gap-6 py-5 items-stretch overflow-hidden">
 
     <!-- --------------------------------------------------------------------- -->
     <!-- COLUMN 1: CLINICAL CASE QUEUE & PATIENT NAVIGATOR (3 COLS)            -->
     <!-- --------------------------------------------------------------------- -->
-    <div id="desk-col-queue" class="col-span-3 desk-card rounded-2xl p-4 flex flex-col justify-between space-y-3">
+    <div id="desk-col-queue" class="col-span-3 desk-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
       <div>
-        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+        <div class="flex justify-between items-center pb-3 border-b border-white/10">
           <span class="text-xs font-mono font-bold tracking-wider text-brand-cyan uppercase">01 / Active Case Queue</span>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">PRIORITY P0</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 font-semibold">PRIORITY P0</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-1.5 mb-3 font-mono">
+        <p class="text-xs text-slate-400 mt-2 mb-3.5 font-mono">
           EHR FHIR Stream &bull; Select case to inspect clinical record:
         </p>
 
         <!-- Case List -->
-        <div class="space-y-2">
+        <div class="space-y-2.5">
           <!-- Active Case Item -->
-          <div id="case-item-target" class="p-3 rounded-xl bg-brand-cyan/10 border border-brand-cyan/40 cursor-pointer transition hover:bg-brand-cyan/15">
+          <div id="case-item-target" class="p-3.5 rounded-xl bg-brand-cyan/10 border border-brand-cyan/40 cursor-pointer transition">
             <div class="flex justify-between items-start">
               <span class="font-bold text-xs text-brand-cyan font-mono">#CHI-8841 &bull; Cardiology</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">PA PENDING</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">PA PENDING</span>
             </div>
             <div class="text-sm font-bold text-white mt-1">Coronary Stent (CPT 92928)</div>
-            <div class="text-[11px] text-slate-300 font-mono mt-0.5">Patient: Robert Chen (64M) &bull; I25.10 CAD</div>
-            <div class="flex items-center space-x-2 mt-2 text-[10px] font-mono text-slate-400">
+            <div class="text-xs text-slate-300 font-mono mt-0.5">Patient: Robert Chen (64M) &bull; I25.10 CAD</div>
+            <div class="flex items-center space-x-2 mt-2 text-[11px] font-mono text-slate-400">
               <span class="text-brand-emerald font-bold">&bull; Vitals Anomaly: Troponin-T</span>
               <span>&bull; Ingested: 2m ago</span>
             </div>
           </div>
 
           <!-- Other Queue Items -->
-          <div class="p-3 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
+          <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
             <div class="flex justify-between items-start">
               <span class="font-bold text-xs text-slate-300 font-mono">#CHI-9102 &bull; Oncology</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-brand-emerald/20 text-brand-emerald font-mono font-bold">APPROVED</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-brand-emerald/20 text-brand-emerald font-mono font-bold">APPROVED</span>
             </div>
             <div class="text-xs font-bold text-slate-200 mt-1">Pembrolizumab (CPT 96413)</div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">Patient: Sarah Jenkins (58F) &bull; C34.90 NSCLC</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Patient: Sarah Jenkins (58F) &bull; C34.90 NSCLC</div>
           </div>
 
-          <div class="p-3 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
+          <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
             <div class="flex justify-between items-start">
               <span class="font-bold text-xs text-slate-300 font-mono">#CHI-7439 &bull; Neurology</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">CARE GAP</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">CARE GAP</span>
             </div>
             <div class="text-xs font-bold text-slate-200 mt-1">Lumbar Spine MRI (CPT 72148)</div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">Patient: Michael Ross (47M) &bull; M54.5 Low Back</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Patient: Michael Ross (47M) &bull; M54.5 Low Back</div>
           </div>
         </div>
       </div>
 
       <!-- Queue Telemetry Box -->
-      <div class="p-3 rounded-xl bg-slate-950/80 border border-white/10 font-mono text-[11px] space-y-1.5">
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-white/10 font-mono text-xs space-y-2">
         <div class="flex justify-between text-slate-400">
           <span>Ingestion Protocol:</span>
-          <span class="text-brand-cyan">FHIR R4 Zero-Copy</span>
+          <span class="text-brand-cyan font-bold">FHIR R4 Zero-Copy</span>
         </div>
         <div class="flex justify-between text-slate-400">
           <span>Schema Validation:</span>
@@ -243,125 +294,125 @@
     <!-- --------------------------------------------------------------------- -->
     <!-- COLUMN 2: CLINICAL EVIDENCE & HOTSPOT INSPECTOR (5 COLS)              -->
     <!-- --------------------------------------------------------------------- -->
-    <div id="desk-col-evidence" class="col-span-5 desk-card desk-card-active rounded-2xl p-5 flex flex-col justify-between space-y-3">
+    <div id="desk-col-evidence" class="col-span-5 desk-card desk-card-active rounded-2xl p-5 flex flex-col justify-between space-y-4">
       <div>
-        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+        <div class="flex justify-between items-center pb-3 border-b border-white/10">
           <div>
             <span class="text-xs font-mono font-bold tracking-wider text-brand-emerald uppercase">02 / Clinical Evidence &amp; Hotspots</span>
-            <h3 class="text-sm font-bold text-white mt-0.5">Patient Case #CHI-8841: Cardiology Cath Lab Request</h3>
+            <h3 class="text-base font-bold text-white mt-0.5">Patient Case #CHI-8841: Cardiology Cath Lab Request</h3>
           </div>
-          <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30 font-semibold">
+          <span class="text-xs font-mono px-3 py-1 rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30 font-semibold">
             EHR RECORD VERIFIED
           </span>
         </div>
 
         <!-- Hotspot Canvas (Structured Diagnostic EHR Report) -->
-        <div class="relative w-full bg-slate-950/90 rounded-xl border border-white/10 p-4 font-mono text-xs text-slate-300 space-y-3 mt-3">
+        <div class="relative w-full bg-slate-950/90 rounded-xl border border-white/10 p-5 font-mono text-xs text-slate-300 space-y-3.5 mt-3">
           
           <!-- Section 1: Patient Header & Vitals with Hotspot 1 -->
-          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
-            <div class="flex justify-between text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">
+          <div class="p-3 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="flex justify-between text-[11px] text-slate-400 pb-1.5 mb-1.5 border-b border-white/05 font-bold">
               <span>PATIENT VITALS &amp; LABS</span>
               <span class="text-brand-cyan">SRAM SCAN 1.18 &mu;s</span>
             </div>
             <div>BP: 142/88 mmHg &bull; HR: 82 bpm &bull; SpO2: 97% &bull; BMI: 28.4</div>
-            <div class="flex items-center space-x-2 mt-1">
+            <div class="flex items-center space-x-2 mt-2">
               <span>Troponin-T:</span>
-              <span id="hotspot-target-1" class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold flex items-center space-x-1 hotspot-active">
+              <span id="hotspot-target-1" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold flex items-center space-x-1 hotspot-active">
                 <span>⚠️ 0.08 ng/mL (ELEVATED)</span>
               </span>
-              <span class="text-[10px] text-brand-cyan">&larr; Hotspot #1: Acute Anomaly Alert</span>
+              <span class="text-xs text-brand-cyan font-bold">&larr; Hotspot #1: Acute Anomaly Alert</span>
             </div>
           </div>
 
           <!-- Section 2: Clinical History with Hotspot 2 -->
-          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
-            <div class="text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">CLINICAL HISTORY &amp; CONSERVATIVE THERAPY</div>
-            <p class="text-[11.5px] leading-relaxed text-slate-200">
+          <div class="p-3 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="text-[11px] text-slate-400 pb-1.5 mb-1.5 border-b border-white/05 font-bold">CLINICAL HISTORY &amp; CONSERVATIVE THERAPY</div>
+            <p class="text-xs leading-relaxed text-slate-200">
               64-year-old male presents with worsening exertional chest pressure radiating to left shoulder.
             </p>
-            <div class="mt-1 flex items-center space-x-2">
-              <span id="hotspot-target-2" class="px-2 py-0.5 rounded bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/40 font-bold hotspot-active">
+            <div class="mt-2 flex items-center space-x-2">
+              <span id="hotspot-target-2" class="px-2.5 py-1 rounded bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/40 font-bold hotspot-active">
                 ✔ Refractory Angina &gt; 30 Days
               </span>
-              <span class="text-[10px] text-slate-400">&bull; Failed Max-Tolerated Metoprolol + Isosorbide</span>
+              <span class="text-xs text-slate-400">&bull; Failed Max-Tolerated Metoprolol + Isosorbide</span>
             </div>
           </div>
 
           <!-- Section 3: Diagnostic Stress Test with Hotspot 3 -->
-          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
-            <div class="text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">OBJECTIVE FUNCTIONAL IMAGING</div>
+          <div class="p-3 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="text-[11px] text-slate-400 pb-1.5 mb-1.5 border-b border-white/05 font-bold">OBJECTIVE FUNCTIONAL IMAGING</div>
             <div class="flex items-center space-x-2">
-              <span id="hotspot-target-3" class="px-2 py-0.5 rounded bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/40 font-bold hotspot-active">
+              <span id="hotspot-target-3" class="px-2.5 py-1 rounded bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/40 font-bold hotspot-active">
                 ✔ Treadmill Stress Test: 2.1mm ST Depression (V4-V6)
               </span>
             </div>
-            <div class="text-[10px] text-slate-400 mt-1">Nuclear Perfusion: Reversible anteroseptal ischemia confirmed.</div>
+            <div class="text-xs text-slate-400 mt-1.5">Nuclear Perfusion: Reversible anteroseptal ischemia confirmed.</div>
           </div>
         </div>
       </div>
 
       <!-- Evidence Grounding Status Box -->
-      <div id="evidence-summary-box" class="p-3.5 rounded-xl bg-brand-emerald/10 border border-brand-emerald/30 font-mono text-xs flex justify-between items-center">
+      <div id="evidence-summary-box" class="p-4 rounded-xl bg-brand-emerald/10 border border-brand-emerald/30 font-mono text-xs flex justify-between items-center">
         <div>
-          <span class="text-brand-emerald font-bold">100% Policy Grounding Achieved:</span>
-          <span class="text-slate-300 ml-1">All 3 MCG-AC-041 criteria verified against EHR notes.</span>
+          <span class="text-brand-emerald font-bold text-sm">100% Policy Grounding Achieved:</span>
+          <span class="text-slate-300 ml-2">All 3 MCG-AC-041 criteria verified against EHR notes.</span>
         </div>
-        <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-emerald text-brand-void">VERIFIED</span>
+        <span class="text-xs font-bold px-3 py-1 rounded bg-brand-emerald text-brand-void">VERIFIED</span>
       </div>
     </div>
 
     <!-- --------------------------------------------------------------------- -->
     <!-- COLUMN 3: POLICY CHECKLIST & ADJUDICATION ACTION PANEL (4 COLS)       -->
     <!-- --------------------------------------------------------------------- -->
-    <div id="desk-col-action" class="col-span-4 desk-card rounded-2xl p-4 flex flex-col justify-between space-y-3">
+    <div id="desk-col-action" class="col-span-4 desk-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
       <div>
-        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+        <div class="flex justify-between items-center pb-3 border-b border-white/10">
           <span class="text-xs font-mono font-bold tracking-wider text-brand-amber uppercase">03 / Deterministic Adjudication</span>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-slate-300">RULE ENGINE</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/10 text-slate-300 font-semibold">RULE ENGINE</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-1.5 mb-2 font-mono">
+        <p class="text-xs text-slate-400 mt-2 mb-3 font-mono">
           Milliman (MCG-AC-041) Coronary Angioplasty Criteria:
         </p>
 
         <!-- MCG Criteria Checklist -->
-        <div class="space-y-2 font-mono text-xs">
-          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+        <div class="space-y-2.5 font-mono text-xs">
+          <div class="p-3 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-brand-emerald font-bold">✔</span>
               <span class="text-slate-200">Refractory Angina &gt; 30d</span>
             </div>
-            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+            <span class="text-[11px] text-brand-emerald font-bold">SATISFIED</span>
           </div>
 
-          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+          <div class="p-3 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-brand-emerald font-bold">✔</span>
               <span class="text-slate-200">Objective Ischemia on Stress Test</span>
             </div>
-            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+            <span class="text-[11px] text-brand-emerald font-bold">SATISFIED</span>
           </div>
 
-          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+          <div class="p-3 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <span class="text-brand-emerald font-bold">✔</span>
               <span class="text-slate-200">Failed Guideline Medical Therapy</span>
             </div>
-            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+            <span class="text-[11px] text-brand-emerald font-bold">SATISFIED</span>
           </div>
         </div>
 
         <!-- Adjudication Action Decision Card -->
-        <div class="mt-4 p-3.5 rounded-xl bg-slate-950/80 border border-brand-cyan/40 space-y-3">
+        <div class="mt-4 p-4 rounded-xl bg-slate-950/80 border border-brand-cyan/40 space-y-3.5">
           <div class="flex justify-between items-center text-xs font-mono">
             <span class="text-slate-400">Proposed Adjudication:</span>
             <span id="adjudication-status-tag" class="text-brand-cyan font-bold text-sm">PRIOR AUTH APPROVED</span>
           </div>
           
-          <div class="space-y-1.5 font-mono text-[11px] text-slate-400 border-t border-white/10 pt-2">
+          <div class="space-y-2 font-mono text-xs text-slate-400 border-t border-white/10 pt-2.5">
             <div class="flex justify-between">
               <span>Authorization #:</span>
-              <span class="text-white font-bold">PA-2026-CHI-9921</span>
+              <span id="adjudication-auth-no" class="text-white font-bold">PA-2026-CHI-9921</span>
             </div>
             <div class="flex justify-between">
               <span>Valid Period:</span>
@@ -374,14 +425,14 @@
           </div>
 
           <!-- Main Interactive Button -->
-          <button id="btn-approve-action" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-600 text-white font-bold text-xs font-mono uppercase tracking-wider shadow-lg shadow-brand-cyan/20 transition transform active:scale-95 flex items-center justify-center space-x-2">
+          <button id="btn-approve-action" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-600 text-white font-bold text-sm font-mono uppercase tracking-wider shadow-lg shadow-brand-cyan/20 transition transform active:scale-95 flex items-center justify-center space-x-2">
             <span>⚡ Approve &amp; Dispatch Electronic Order</span>
           </button>
         </div>
       </div>
 
       <!-- Execution Terminal Snippet -->
-      <div id="desk-terminal-dock" class="p-3 rounded-xl bg-slate-950/90 border border-white/10 font-mono text-[10.5px] space-y-1 text-slate-300">
+      <div id="desk-terminal-dock" class="p-3.5 rounded-xl bg-slate-950/90 border border-white/10 font-mono text-xs space-y-1.5 text-slate-300">
         <div><span class="text-brand-emerald">$</span> python 02_SourceCode/runner.py --track pa_prior_auth</div>
         <div class="text-slate-400">[FSM] Case #CHI-8841 transitioned: [INGESTION] &rarr; [DETERMINATION] (Turn 4/15)</div>
         <div class="text-brand-cyan">[ZDR] 2-Pass physical overwrite armed (0xAA &rarr; 0x00)</div>
@@ -393,8 +444,8 @@
   <!-- ========================================================================= -->
   <!-- 3. BOTTOM SOVEREIGN SECURITY DOCK & AUDIT SIGNATURE                       -->
   <!-- ========================================================================= -->
-  <footer class="w-full z-20 flex justify-between items-center pt-3 border-t border-white/10 font-mono text-xs">
-    <div class="flex items-center space-x-5 text-slate-400">
+  <footer id="desk-footer" class="w-full z-20 flex justify-between items-center pt-3 border-t border-white/10 font-mono text-xs">
+    <div class="flex items-center space-x-6 text-slate-400">
       <div><span>HIPAA Boundary:</span> <span class="text-brand-emerald font-bold">Zero PHI Residue (0.00 MB)</span></div>
       <div><span>Hardware Circuit Breaker:</span> <span class="text-brand-cyan font-bold">50.0 GB VRAM Active</span></div>
       <div><span>Replication:</span> <span class="text-slate-200">github.com/jackhu24-ship-it/phantom-grid-chi-bench</span></div>
@@ -406,29 +457,97 @@
       <span class="text-slate-500">|</span>
       <span class="font-bold text-brand-cyan">👩‍💼 COMMANDER: XIAOMI</span>
       <span class="text-slate-500">|</span>
-      <span class="text-[10px] text-slate-400">IEEE Big Data 2026 CHI-Bench</span>
+      <span class="text-xs text-slate-400">IEEE Big Data 2026 CHI-Bench</span>
     </div>
   </footer>
 
-  <!-- Script for Dynamic Pointer & Virtual Cursor Movement -->
+  <!-- Script for Absolute Pointing & Virtual Cursor Interpolation -->
   <script>
-    function moveCursorTo(targetSelector, labelText, callback) {
-      const el = document.querySelector(targetSelector);
+    let currentX = 1280;
+    let currentY = 720;
+
+    function moveCursorDirectly(targetSelector, labelText, progressRatio, isClick, spokenSubtitle) {
       const cursor = document.getElementById('virtual-cursor');
       const label = document.getElementById('virtual-cursor-label');
-      if (!el || !cursor) return;
+      const subTextEl = document.getElementById('director-sub-text');
 
-      const rect = el.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
+      if (spokenSubtitle && subTextEl) {
+        subTextEl.innerText = spokenSubtitle;
+      }
 
-      cursor.style.transform = `translate(${x}px, ${y}px)`;
-      if (label && labelText) label.innerText = labelText;
+      if (labelText && label) {
+        label.innerText = labelText;
+      }
 
-      document.querySelectorAll('.focus-target-active').forEach(e => e.classList.remove('focus-target-active'));
-      el.classList.add('focus-target-active');
+      const targetEl = document.querySelector(targetSelector);
+      if (!targetEl || !cursor) return;
 
-      if (callback) setTimeout(callback, 300);
+      document.querySelectorAll('.focus-target-active').forEach(el => el.classList.remove('focus-target-active'));
+      targetEl.classList.add('focus-target-active');
+
+      const rect = targetEl.getBoundingClientRect();
+      let tx = rect.left + rect.width / 2;
+      let ty = rect.top + rect.height / 2;
+
+      // Custom offsets for buttons, hotspots, and cards to point exactly at the focal item
+      if (targetSelector === '#btn-approve-action') {
+        tx = rect.left + rect.width * 0.35;
+        ty = rect.top + rect.height * 0.5;
+      } else if (targetSelector.startsWith('#hotspot')) {
+        tx = rect.left + 30;
+        ty = rect.top + rect.height * 0.5;
+      } else if (targetSelector === '#case-item-target') {
+        tx = rect.left + rect.width * 0.35;
+        ty = rect.top + rect.height * 0.45;
+      } else if (targetSelector === '#desk-col-queue') {
+        tx = rect.left + rect.width * 0.4;
+        ty = rect.top + 50;
+      } else if (targetSelector === '#desk-col-evidence') {
+        tx = rect.left + rect.width * 0.4;
+        ty = rect.top + 45;
+      } else if (targetSelector === '#sovereign-seal-plaque') {
+        tx = rect.left + rect.width * 0.4;
+        ty = rect.top + rect.height * 0.5;
+      } else if (targetSelector === 'header') {
+        tx = rect.left + rect.width * 0.5;
+        ty = rect.top + rect.height * 0.5;
+      } else if (targetSelector === 'footer' || targetSelector === '#desk-footer') {
+        tx = rect.left + rect.width * 0.25;
+        ty = rect.top + rect.height * 0.5;
+      } else if (targetSelector === '#desk-terminal-dock') {
+        tx = rect.left + rect.width * 0.35;
+        ty = rect.top + rect.height * 0.3;
+      }
+
+      // Smooth cosine easing
+      const t = Math.max(0, Math.min(1, progressRatio));
+      const smoothT = 0.5 - 0.5 * Math.cos(t * Math.PI);
+
+      const x = currentX + (tx - currentX) * smoothT;
+      const y = currentY + (ty - currentY) * smoothT;
+
+      let clickScale = '';
+      if (isClick && t >= 0.35) {
+        if (t <= 0.75) {
+          clickScale = ' scale(0.90)';
+        }
+        // Trigger visual click effect on button and persist state
+        if (targetSelector === '#btn-approve-action') {
+          const btn = document.getElementById('btn-approve-action');
+          btn.classList.remove('bg-gradient-to-r', 'from-brand-cyan', 'via-blue-500', 'to-indigo-600');
+          btn.classList.add('bg-emerald-600');
+          btn.innerHTML = '<span>✔ DISPATCHED &amp; APPROVED (AUTH #PA-2026-CHI-9921)</span>';
+          document.getElementById('adjudication-status-tag').innerHTML = '<span class="text-brand-emerald font-bold">✔ 0.00 MB ZDR PHI PURGED</span>';
+        }
+      }
+
+      cursor.style.transform = `translate(${x}px, ${y}px)${clickScale}`;
+
+      // Update current coordinates when progress reaches 1
+      if (t >= 0.99) {
+        currentX = tx;
+        currentY = ty;
+      }
     }
   </script>
 </body>
