@@ -249,7 +249,7 @@ def render_chi_bench_02_video():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": CANVAS_WIDTH, "height": CANVAS_HEIGHT})
-        page.goto(html_path.as_uri())
+        page.goto(html_path.as_uri(), wait_until="domcontentloaded")
         page.wait_for_timeout(1500)
 
         for item in sentence_metadata:

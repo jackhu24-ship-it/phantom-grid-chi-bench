@@ -117,23 +117,19 @@
       box-shadow: 0 0 35px rgba(0, 242, 254, 0.5) !important;
     }
 
-    /* Subtitle Banner */
+    /* Subtitle Banner (Dedicated Broadcast Zone) */
     #director-subtitle-bar {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1400px;
-      background: rgba(10, 15, 30, 0.92);
-      border: 1px solid rgba(0, 242, 254, 0.4);
-      border-radius: 14px;
-      padding: 10px 24px;
+      width: 1800px;
+      max-width: 90%;
+      background: rgba(10, 15, 30, 0.95);
+      border: 1.5px solid rgba(0, 242, 254, 0.5);
+      border-radius: 12px;
+      padding: 8px 24px;
       display: flex;
       align-items: center;
       gap: 16px;
-      z-index: 99990;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 254, 0.15);
+      backdrop-filter: blur(10px);
     }
     #director-sub-badge {
       background: rgba(0, 242, 254, 0.15);
@@ -161,12 +157,6 @@
   <div id="virtual-cursor">
     <div id="virtual-cursor-icon"></div>
     <div id="virtual-cursor-label">FRONTIER :: CHI-BENCH CLINICAL INTELLIGENCE</div>
-  </div>
-
-  <!-- Teleprompter Subtitle Bar -->
-  <div id="director-subtitle-bar">
-    <div id="director-sub-badge">NARRATION</div>
-    <div id="director-sub-text">Welcome to PHANToM GRID. In this demonstration, we present our autonomous healthcare operations agent for the IEEE Big Data CHI-Bench challenge.</div>
   </div>
 
   <!-- ========================================================================= -->
@@ -440,6 +430,14 @@
       </div>
     </div>
   </main>
+
+  <!-- Teleprompter Subtitle Bar Row (Dedicated Broadcast Zone, Zero Overlap) -->
+  <div id="director-subtitle-row" class="w-full z-30 flex justify-center py-2.5">
+    <div id="director-subtitle-bar">
+      <div id="director-sub-badge">NARRATION</div>
+      <div id="director-sub-text">Welcome to PHANToM GRID. In this demonstration, we present our autonomous healthcare operations agent for the IEEE Big Data CHI-Bench challenge.</div>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- 3. BOTTOM SOVEREIGN SECURITY DOCK & AUDIT SIGNATURE                       -->
