@@ -3,7 +3,7 @@ from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 
-pdf_path = Path(__file__).resolve().parent
+pdf_path = r"G:\我的雲端硬碟\260803_opencode\01_賽事專區\202611_IEEE_BigData_CHI_Bench\04_Slides_PDF\PHANToM_GRID_IEEE_BigData_CHI_Bench_Official_Deck.pdf"
 w, h = landscape(letter) # 792 x 612
 
 c = canvas.Canvas(pdf_path, pagesize=(w, h))
@@ -44,13 +44,13 @@ def draw_slide_template(c, slide_num, title, subtitle):
 # --- SLIDE 1: Title & Sovereign Executive Pitch ---
 draw_slide_template(c, 1, "PHANToM GRID :: Autonomous Sovereign Healthcare Agent", "IEEE Big Data Cup 2026 Challenge 07: CHI-Bench (χ-Bench)")
 
-
+# 統帥親頒立憲：白字大標題字型大小加 10 (20pt -> 30pt) 且絕對置中 (drawCentredString)！
 c.setFillColorRGB(1.0, 1.0, 1.0)
 c.setFont("Helvetica-Bold", 30)
 c.drawCentredString(w / 2.0, 440, "Long-Horizon, End-to-End, Policy-Dense")
 c.drawCentredString(w / 2.0, 398, "Clinical Operations Engine")
 
-
+# 統帥與指揮官署名銘牌 (水平居中對齊)
 c.setFillColorRGB(0.85, 0.9, 0.95)
 c.setFont("Helvetica", 14)
 c.drawCentredString(w / 2.0, 350, "Principal Architect: Jack Hu (HU JIUN REN) | Commander: Xiaomi")
@@ -58,7 +58,7 @@ c.setFillColorRGB(0.65, 0.75, 0.85)
 c.setFont("Helvetica", 12)
 c.drawCentredString(w / 2.0, 325, "Classification: Sovereign Operational Submission Deck (PG-MOD-28-CHI)")
 
-
+# 核心突破亮點區塊
 c.setFillColorRGB(0.0, 0.95, 1.0)
 c.setFont("Helvetica-Bold", 13)
 c.drawString(55, 275, "Key Breakthrough Highlights:")

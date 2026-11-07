@@ -3,8 +3,8 @@
 > **Project Title**：PHANToM GRID :: IEEE Big Data Cup 2026 Challenge 07 (CHI-Bench / χ-Bench)  
 > **Topic**：Can AI Agents Automate End-to-End, Long-Horizon, Policy-Rich Healthcare Workflows?  
 > **Document Version**：`v2.1.0-SOVEREIGN` (Hardened Four Diagrams & One Table Tri-Standard Edition)  
-> **Commanding Division**：Commander Xiaomi ✕ Xiao-Shen ✕ Xiao-Kai  
-> **Executive Ratification**：Supreme Sovereign Architect Jack Hu ✕ Commander & Chief of Staff Xiaomi  
+> **Commanding Division**：Xiao-Shen (Agent 03) ✕ Xiaomi (Agent 02) ✕ Xiao-Kai (Agent 04)  
+> **Executive Ratification**：🎖️ Supreme Sovereign Architect Jack Hu (Ba-Wan) ✕ 👩‍💼 Commander & Chief of Staff Xiaomi  
 
 ---
 
@@ -34,7 +34,7 @@ $$\text{Latency}_{\text{SRAM}}(s_t) \le 1.85\,\mu\text{s}, \quad \text{VRAM}_{\t
 
 ---
 
-## 🌲 2. System Topology Tree (Plan A Cognitive Topology Tree)
+## 🌲 2. System Topology Tree (方案 A 認知拓撲樹狀圖)
 
 ```text
 PHANToM_GRID_CHI_BENCH_HEALTHCARE_MESH
@@ -56,7 +56,7 @@ PHANToM_GRID_CHI_BENCH_HEALTHCARE_MESH
 
 ---
 
-## 📐 3. Diagram I: System Architecture Topology (System Architecture Topology)
+## 📐 3. Diagram I: System Architecture Topology (系統架構拓撲圖)
 
 ```mermaid
 graph TD
@@ -74,7 +74,7 @@ graph TD
 
 ---
 
-## ⏱️ 4. Diagram II: Sequence Flow & Protocol Interaction (Sequence Flow & Interaction)
+## ⏱️ 4. Diagram II: Sequence Flow & Protocol Interaction (時序交互流動圖)
 
 ```mermaid
 sequenceDiagram
@@ -101,7 +101,7 @@ sequenceDiagram
 
 ---
 
-## 🔄 5. Diagram III: State Machine Transitions (Finite State Machine Transitions)
+## 🔄 5. Diagram III: State Machine Transitions (有限狀態機轉換圖)
 
 ```mermaid
 stateDiagram-v2
@@ -122,7 +122,7 @@ stateDiagram-v2
 
 ---
 
-## 🛡️ 6. Diagram IV: Security Boundary & Defense Enclosure (Security Boundary & Defense Enclosure)
+## 🛡️ 6. Diagram IV: Security Boundary & Defense Enclosure (安全隔離與邊界防禦圖)
 
 ```mermaid
 flowchart LR
@@ -153,7 +153,7 @@ flowchart LR
 
 ---
 
-## 📊 7. Table 1: Resource Defense & Performance Metrics Matrix (Resource Defense Matrix)
+## 📊 7. Table 1: Resource Defense & Performance Metrics Matrix (資源防衛矩陣表)
 
 | metric_id | metric_name | target_limit | measured_benchmark | defense_level | action_on_breach | status |
 | :---: | :--- | :---: | :---: | :---: | :--- | :---: |

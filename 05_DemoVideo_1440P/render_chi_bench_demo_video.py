@@ -34,12 +34,12 @@ try:
     font_act_lg = ImageFont.truetype("arialbd.ttf", 28)
     font_act_sm = ImageFont.truetype("arialbd.ttf", 24)
     font_radar_title = ImageFont.truetype("arialbd.ttf", 32)
-    font_audit_title = ImageFont.truetype("arialbd.ttf", 24)
+    font_audit_title = ImageFont.truetype("arialbd.ttf", 24) # 專用安全防破框標題字體
     font_body_bold = ImageFont.truetype("arialbd.ttf", 28)
-    font_body = ImageFont.truetype("arial.ttf", 26)
-    font_mono_xl = ImageFont.truetype("consolab.ttf", 38)
+    font_body = ImageFont.truetype("arial.ttf", 26)         # 加大內容字級
+    font_mono_xl = ImageFont.truetype("consolab.ttf", 38)   # 雷達數值加大
     font_mono_lg = ImageFont.truetype("consolab.ttf", 30)
-    font_mono_md = ImageFont.truetype("consolab.ttf", 26)
+    font_mono_md = ImageFont.truetype("consolab.ttf", 26)   # 終端內容字級
     font_mono_sm = ImageFont.truetype("consolab.ttf", 22)
     font_badge = ImageFont.truetype("segoeuib.ttf", 22)
     font_sub_head = ImageFont.truetype("arialbd.ttf", 26)
@@ -174,12 +174,12 @@ def render_scene(config: dict, act_idx: int, progress: float, sentence_idx: int)
     left_box = [60, 135, 1550, 1120]
     right_box = [1590, 135, 2500, 1120]
     
-
+    # 焦點狀態判定
     is_terminal_focus = (sentence_idx == 0)
     is_audit_focus = (sentence_idx == 1)
     is_radar_focus = (sentence_idx >= 2)
     
-
+    # --- 左側主終端面板 ---
     left_outline_col = (0, 229, 255) if is_terminal_focus else (51, 65, 85)
     left_outline_w = 4 if is_terminal_focus else 2
     draw.rounded_rectangle(left_box, radius=10, fill=(13, 20, 36), outline=left_outline_col, width=left_outline_w)
@@ -208,7 +208,7 @@ def render_scene(config: dict, act_idx: int, progress: float, sentence_idx: int)
             color = (34, 197, 94) if any(k in line for k in ["[OK]", "VERIFIED", "PASS", "APPROVED"]) else ((251, 191, 36) if any(k in line for k in ["[WARN]", "[INIT]", "[BOOT]", "[INGEST]", "[BOTTLENECK]"]) else (241, 245, 249))
             draw.text((115, y_pos), line, font=font_mono_md, fill=color)
         
-
+    # --- 左下臨床審計面板（嚴格防破框幾何）---
     hl_box = [95, 680, 1515, 1080]
     audit_border_color = (251, 191, 36) if is_audit_focus else ((0, 229, 255) if is_terminal_focus else (56, 189, 248))
     audit_border_w = 4 if is_audit_focus else 2
@@ -238,7 +238,7 @@ def render_scene(config: dict, act_idx: int, progress: float, sentence_idx: int)
         else:
             draw.text((142, 770 + n_idx * 58), note, font=font_body, fill=note_color)
     
-
+    # --- 右側雷達面板 ---
     radar_border_color = (16, 185, 129) if is_radar_focus else (51, 65, 85)
     radar_border_w = 4 if is_radar_focus else 2
     draw.rounded_rectangle(right_box, radius=10, fill=(11, 18, 33), outline=radar_border_color, width=radar_border_w)
@@ -284,7 +284,7 @@ def render_scene(config: dict, act_idx: int, progress: float, sentence_idx: int)
             fill=card_outline_col
         )
         
-
+    # --- 右下角金牌呼叫按鈕 ---
     c_btn = [1620, 950, 2470, 1070]
     draw.rounded_rectangle(c_btn, radius=8, fill=(16, 185, 129), outline=(34, 197, 94), width=2)
     draw.text((1650, 970), act.get("callout_text", "SOVEREIGN HEALTHCARE MESH"), font=font_mono_lg, fill=(10, 15, 28))
@@ -300,7 +300,7 @@ def render_chi_bench_demo_video():
         "header_title": "PHANTOM GRID :: CHI-BENCH HEALTHCARE MESH",
         "module_name": "chi_bench_healthcare_agent_core.py",
         "status_badge": "STATUS: ASIL-D VERIFIED",
-        "output_path": Path(Path(__file__).resolve().parent),
+        "output_path": Path(r"G:\我的雲端硬碟\260803_opencode\01_賽事專區\202611_IEEE_BigData_CHI_Bench\05_DemoVideo_1440P\demo_video_1440p.mp4"),
         "acts": [
             {
                 "act": 1,
@@ -446,10 +446,10 @@ def render_chi_bench_demo_video():
             generate_speech_wav(sentence_text, wav_path)
             
             raw_dur = get_audio_duration(wav_path)
-
+            # 自然短氣口 0.25 秒
             dur = raw_dur + 0.25
             
-
+            # 若是最後一句話，額外加上 4.0 秒尾音緩衝（Ending Cushion），絕不提早掐斷！
             is_last_sentence = (act_idx == len(config["acts"]) - 1 and s_idx == len(act["sentences"]) - 1)
             if is_last_sentence:
                 dur += 4.0
@@ -475,7 +475,7 @@ def render_chi_bench_demo_video():
     total_duration = sum(sentence_durations)
     print(f"[*] Total Master Duration: {total_duration:.2f}s (~{int(total_duration//60)}m {int(total_duration%60)}s)")
     
-
+    # 建立無縫串接音訊清單
     concat_list = scratch_dir / "concat_audio.txt"
     with open(concat_list, "w", encoding="utf-8") as f:
         for pw in sentence_audio_files:
@@ -487,7 +487,7 @@ def render_chi_bench_demo_video():
         "-i", str(concat_list), "-c", "copy", str(merged_wav)
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
-
+    # 混合 -28dB 柔和科技底噪
     master_audio = scratch_dir / "master_audio_bed.wav"
     subprocess.run([
         "ffmpeg", "-y",
@@ -541,8 +541,8 @@ def render_chi_bench_demo_video():
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print(f"[OK] Master Video successfully written to {out_path} ({os.path.getsize(out_path)} bytes)")
     
-
-    vault_mirror = Path(Path(__file__).resolve().parent)
+    # 鏡像備份至中央永久金庫
+    vault_mirror = Path(r"G:\我的雲端硬碟\260803_opencode\00_System\Permanent_Tournaments_Vault\Decks_and_Slides\202611_IEEE_BigData_CHI_Bench\demo_video_1440p.mp4")
     try:
         vault_mirror.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(str(out_path), str(vault_mirror))
