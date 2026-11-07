@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHANToM GRID :: IEEE Big Data CHI-Bench Autonomous Clinical Operations Desk (PG-SHOWCASE-02)</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              void: '#070a14',
+              dark: '#0c1222',
+              card: '#10192e',
+              border: 'rgba(255, 255, 255, 0.1)',
+              cyan: '#00F2FE',
+              neon: '#00E5FF',
+              emerald: '#10B981',
+              amber: '#F59E0B',
+              indigo: '#6366F1',
+              purple: '#8B5CF6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #070a14;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .desk-card {
+      background: rgba(16, 25, 46, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+    }
+
+    .desk-card-active {
+      border-color: rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 25px -5px rgba(0, 242, 254, 0.2);
+    }
+
+    /* Hotspot Pulse */
+    @keyframes ping-subtle {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.15); opacity: 0.4; }
+    }
+    .hotspot-active {
+      animation: ping-subtle 2s infinite ease-in-out;
+    }
+
+    /* Virtual Cursor */
+    #virtual-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #virtual-cursor-icon {
+      width: 24px;
+      height: 24px;
+      background: radial-gradient(circle, #00F2FE 30%, rgba(0, 242, 254, 0.2) 70%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00F2FE, 0 0 30px #00F2FE;
+    }
+    #virtual-cursor-label {
+      background: rgba(7, 10, 20, 0.9);
+      border: 1px solid #00F2FE;
+      color: #00F2FE;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      letter-spacing: 0.05em;
+    }
+
+    /* Highlight Pulse */
+    .focus-target-active {
+      outline: 2px solid #00F2FE !important;
+      outline-offset: 4px;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.35) !important;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen relative flex flex-col justify-between p-6 sm:p-8">
+
+  <!-- Virtual Cursor -->
+  <div id="virtual-cursor" style="left: 960px; top: 540px;">
+    <div id="virtual-cursor-icon"></div>
+    <div id="virtual-cursor-label">FOCUS</div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP UTILITY & TELEMETRY HUD BAR                                       -->
+  <!-- ========================================================================= -->
+  <header class="w-full z-20 flex justify-between items-center pb-4 border-b border-white/10">
+    <div class="flex items-center space-x-3.5">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan/25 to-brand-purple/25 border border-brand-cyan/40 flex items-center justify-center font-bold text-base text-brand-cyan font-mono shadow-lg shadow-brand-cyan/15">
+        CHI
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="font-extrabold tracking-wider text-base sm:text-lg bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-blue-400 to-indigo-400">
+            PHANToM GRID :: CLINICAL OPERATIONS DESK
+          </span>
+          <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-brand-emerald/15 border border-brand-emerald/40 text-brand-emerald font-semibold flex items-center">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-ping mr-1"></span>
+            ASIL-D CERTIFIED
+          </span>
+          <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-brand-cyan/15 border border-brand-cyan/40 text-brand-cyan font-semibold">
+            PG-SHOWCASE-02 WORKBENCH
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 font-mono flex items-center space-x-2 mt-0.5">
+          <span>IEEE Big Data Cup 2026 Challenge 07 (CHI-Bench)</span>
+          <span class="text-slate-600">|</span>
+          <span>SRAM Latency: <span class="text-brand-emerald font-bold">1.18 &mu;s</span></span>
+          <span class="text-slate-600">|</span>
+          <span>VRAM: <span class="text-brand-cyan font-bold">14.8 / 50.0 GB</span></span>
+          <span class="text-slate-600">|</span>
+          <span>ZDR: <span class="text-brand-emerald font-bold">0.00 MB PHI Residue</span></span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Quick Counters -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden lg:flex items-center space-x-3 text-xs font-mono">
+        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-cyan">
+          <span class="text-slate-400">Cases Ingested:</span>
+          <span class="text-white font-bold ml-1">1,290</span>
+        </div>
+        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-emerald">
+          <span class="text-slate-400">Pass@1 Concordance:</span>
+          <span class="text-brand-emerald font-bold ml-1">96.4%</span>
+        </div>
+        <div class="desk-card px-3.5 py-1.5 rounded-xl border-l-2 border-brand-amber">
+          <span class="text-slate-400">Avg Decision:</span>
+          <span class="text-brand-amber font-bold ml-1">8.42 ms</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN THREE-COLUMN CLINICAL DESK WORKSPACE                              -->
+  <!-- ========================================================================= -->
+  <main class="w-full flex-1 grid grid-cols-12 gap-5 py-4 items-stretch overflow-hidden">
+
+    <!-- --------------------------------------------------------------------- -->
+    <!-- COLUMN 1: CLINICAL CASE QUEUE & PATIENT NAVIGATOR (3 COLS)            -->
+    <!-- --------------------------------------------------------------------- -->
+    <div id="desk-col-queue" class="col-span-3 desk-card rounded-2xl p-4 flex flex-col justify-between space-y-3">
+      <div>
+        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+          <span class="text-xs font-mono font-bold tracking-wider text-brand-cyan uppercase">01 / Active Case Queue</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">PRIORITY P0</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1.5 mb-3 font-mono">
+          EHR FHIR Stream &bull; Select case to inspect clinical record:
+        </p>
+
+        <!-- Case List -->
+        <div class="space-y-2">
+          <!-- Active Case Item -->
+          <div id="case-item-target" class="p-3 rounded-xl bg-brand-cyan/10 border border-brand-cyan/40 cursor-pointer transition hover:bg-brand-cyan/15">
+            <div class="flex justify-between items-start">
+              <span class="font-bold text-xs text-brand-cyan font-mono">#CHI-8841 &bull; Cardiology</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">PA PENDING</span>
+            </div>
+            <div class="text-sm font-bold text-white mt-1">Coronary Stent (CPT 92928)</div>
+            <div class="text-[11px] text-slate-300 font-mono mt-0.5">Patient: Robert Chen (64M) &bull; I25.10 CAD</div>
+            <div class="flex items-center space-x-2 mt-2 text-[10px] font-mono text-slate-400">
+              <span class="text-brand-emerald font-bold">&bull; Vitals Anomaly: Troponin-T</span>
+              <span>&bull; Ingested: 2m ago</span>
+            </div>
+          </div>
+
+          <!-- Other Queue Items -->
+          <div class="p-3 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
+            <div class="flex justify-between items-start">
+              <span class="font-bold text-xs text-slate-300 font-mono">#CHI-9102 &bull; Oncology</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-brand-emerald/20 text-brand-emerald font-mono font-bold">APPROVED</span>
+            </div>
+            <div class="text-xs font-bold text-slate-200 mt-1">Pembrolizumab (CPT 96413)</div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">Patient: Sarah Jenkins (58F) &bull; C34.90 NSCLC</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-white/[0.03] border border-white/05 opacity-75">
+            <div class="flex justify-between items-start">
+              <span class="font-bold text-xs text-slate-300 font-mono">#CHI-7439 &bull; Neurology</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">CARE GAP</span>
+            </div>
+            <div class="text-xs font-bold text-slate-200 mt-1">Lumbar Spine MRI (CPT 72148)</div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">Patient: Michael Ross (47M) &bull; M54.5 Low Back</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Queue Telemetry Box -->
+      <div class="p-3 rounded-xl bg-slate-950/80 border border-white/10 font-mono text-[11px] space-y-1.5">
+        <div class="flex justify-between text-slate-400">
+          <span>Ingestion Protocol:</span>
+          <span class="text-brand-cyan">FHIR R4 Zero-Copy</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+          <span>Schema Validation:</span>
+          <span class="text-brand-emerald font-bold">100% INVARIANT</span>
+        </div>
+        <div class="flex justify-between text-slate-400">
+          <span>Active FastMCP Tools:</span>
+          <span class="text-brand-amber font-bold">87 Scoped APIs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------- -->
+    <!-- COLUMN 2: CLINICAL EVIDENCE & HOTSPOT INSPECTOR (5 COLS)              -->
+    <!-- --------------------------------------------------------------------- -->
+    <div id="desk-col-evidence" class="col-span-5 desk-card desk-card-active rounded-2xl p-5 flex flex-col justify-between space-y-3">
+      <div>
+        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+          <div>
+            <span class="text-xs font-mono font-bold tracking-wider text-brand-emerald uppercase">02 / Clinical Evidence &amp; Hotspots</span>
+            <h3 class="text-sm font-bold text-white mt-0.5">Patient Case #CHI-8841: Cardiology Cath Lab Request</h3>
+          </div>
+          <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30 font-semibold">
+            EHR RECORD VERIFIED
+          </span>
+        </div>
+
+        <!-- Hotspot Canvas (Structured Diagnostic EHR Report) -->
+        <div class="relative w-full bg-slate-950/90 rounded-xl border border-white/10 p-4 font-mono text-xs text-slate-300 space-y-3 mt-3">
+          
+          <!-- Section 1: Patient Header & Vitals with Hotspot 1 -->
+          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="flex justify-between text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">
+              <span>PATIENT VITALS &amp; LABS</span>
+              <span class="text-brand-cyan">SRAM SCAN 1.18 &mu;s</span>
+            </div>
+            <div>BP: 142/88 mmHg &bull; HR: 82 bpm &bull; SpO2: 97% &bull; BMI: 28.4</div>
+            <div class="flex items-center space-x-2 mt-1">
+              <span>Troponin-T:</span>
+              <span id="hotspot-target-1" class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold flex items-center space-x-1 hotspot-active">
+                <span>⚠️ 0.08 ng/mL (ELEVATED)</span>
+              </span>
+              <span class="text-[10px] text-brand-cyan">&larr; Hotspot #1: Acute Anomaly Alert</span>
+            </div>
+          </div>
+
+          <!-- Section 2: Clinical History with Hotspot 2 -->
+          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">CLINICAL HISTORY &amp; CONSERVATIVE THERAPY</div>
+            <p class="text-[11.5px] leading-relaxed text-slate-200">
+              64-year-old male presents with worsening exertional chest pressure radiating to left shoulder.
+            </p>
+            <div class="mt-1 flex items-center space-x-2">
+              <span id="hotspot-target-2" class="px-2 py-0.5 rounded bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/40 font-bold hotspot-active">
+                ✔ Refractory Angina &gt; 30 Days
+              </span>
+              <span class="text-[10px] text-slate-400">&bull; Failed Max-Tolerated Metoprolol + Isosorbide</span>
+            </div>
+          </div>
+
+          <!-- Section 3: Diagnostic Stress Test with Hotspot 3 -->
+          <div class="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 relative">
+            <div class="text-[11px] text-slate-400 pb-1 mb-1 border-b border-white/05">OBJECTIVE FUNCTIONAL IMAGING</div>
+            <div class="flex items-center space-x-2">
+              <span id="hotspot-target-3" class="px-2 py-0.5 rounded bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/40 font-bold hotspot-active">
+                ✔ Treadmill Stress Test: 2.1mm ST Depression (V4-V6)
+              </span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-1">Nuclear Perfusion: Reversible anteroseptal ischemia confirmed.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evidence Grounding Status Box -->
+      <div id="evidence-summary-box" class="p-3.5 rounded-xl bg-brand-emerald/10 border border-brand-emerald/30 font-mono text-xs flex justify-between items-center">
+        <div>
+          <span class="text-brand-emerald font-bold">100% Policy Grounding Achieved:</span>
+          <span class="text-slate-300 ml-1">All 3 MCG-AC-041 criteria verified against EHR notes.</span>
+        </div>
+        <span class="text-xs font-bold px-2 py-0.5 rounded bg-brand-emerald text-brand-void">VERIFIED</span>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------------- -->
+    <!-- COLUMN 3: POLICY CHECKLIST & ADJUDICATION ACTION PANEL (4 COLS)       -->
+    <!-- --------------------------------------------------------------------- -->
+    <div id="desk-col-action" class="col-span-4 desk-card rounded-2xl p-4 flex flex-col justify-between space-y-3">
+      <div>
+        <div class="flex justify-between items-center pb-2.5 border-b border-white/10">
+          <span class="text-xs font-mono font-bold tracking-wider text-brand-amber uppercase">03 / Deterministic Adjudication</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-slate-300">RULE ENGINE</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1.5 mb-2 font-mono">
+          Milliman (MCG-AC-041) Coronary Angioplasty Criteria:
+        </p>
+
+        <!-- MCG Criteria Checklist -->
+        <div class="space-y-2 font-mono text-xs">
+          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-brand-emerald font-bold">✔</span>
+              <span class="text-slate-200">Refractory Angina &gt; 30d</span>
+            </div>
+            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-brand-emerald font-bold">✔</span>
+              <span class="text-slate-200">Objective Ischemia on Stress Test</span>
+            </div>
+            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/08 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="text-brand-emerald font-bold">✔</span>
+              <span class="text-slate-200">Failed Guideline Medical Therapy</span>
+            </div>
+            <span class="text-[10px] text-brand-emerald font-semibold">SATISFIED</span>
+          </div>
+        </div>
+
+        <!-- Adjudication Action Decision Card -->
+        <div class="mt-4 p-3.5 rounded-xl bg-slate-950/80 border border-brand-cyan/40 space-y-3">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="text-slate-400">Proposed Adjudication:</span>
+            <span id="adjudication-status-tag" class="text-brand-cyan font-bold text-sm">PRIOR AUTH APPROVED</span>
+          </div>
+          
+          <div class="space-y-1.5 font-mono text-[11px] text-slate-400 border-t border-white/10 pt-2">
+            <div class="flex justify-between">
+              <span>Authorization #:</span>
+              <span class="text-white font-bold">PA-2026-CHI-9921</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Valid Period:</span>
+              <span class="text-slate-300">90 Days (Valid thru Feb 2027)</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Deterministic Pass:</span>
+              <span class="text-brand-emerald font-bold">Pass@1 Concordance 96.4%</span>
+            </div>
+          </div>
+
+          <!-- Main Interactive Button -->
+          <button id="btn-approve-action" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan via-blue-500 to-indigo-600 text-white font-bold text-xs font-mono uppercase tracking-wider shadow-lg shadow-brand-cyan/20 transition transform active:scale-95 flex items-center justify-center space-x-2">
+            <span>⚡ Approve &amp; Dispatch Electronic Order</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Execution Terminal Snippet -->
+      <div id="desk-terminal-dock" class="p-3 rounded-xl bg-slate-950/90 border border-white/10 font-mono text-[10.5px] space-y-1 text-slate-300">
+        <div><span class="text-brand-emerald">$</span> python 02_SourceCode/runner.py --track pa_prior_auth</div>
+        <div class="text-slate-400">[FSM] Case #CHI-8841 transitioned: [INGESTION] &rarr; [DETERMINATION] (Turn 4/15)</div>
+        <div class="text-brand-cyan">[ZDR] 2-Pass physical overwrite armed (0xAA &rarr; 0x00)</div>
+        <div class="text-brand-emerald font-bold">[WORM] Sealed by Architect Jack Hu &bull; SHA-256 Valid</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 3. BOTTOM SOVEREIGN SECURITY DOCK & AUDIT SIGNATURE                       -->
+  <!-- ========================================================================= -->
+  <footer class="w-full z-20 flex justify-between items-center pt-3 border-t border-white/10 font-mono text-xs">
+    <div class="flex items-center space-x-5 text-slate-400">
+      <div><span>HIPAA Boundary:</span> <span class="text-brand-emerald font-bold">Zero PHI Residue (0.00 MB)</span></div>
+      <div><span>Hardware Circuit Breaker:</span> <span class="text-brand-cyan font-bold">50.0 GB VRAM Active</span></div>
+      <div><span>Replication:</span> <span class="text-slate-200">github.com/jackhu24-ship-it/phantom-grid-chi-bench</span></div>
+    </div>
+
+    <!-- Sovereign Seal Plaque -->
+    <div id="sovereign-seal-plaque" class="flex items-center space-x-4 px-4 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300">
+      <span class="font-bold">🎖️ ARCHITECT: JACK HU</span>
+      <span class="text-slate-500">|</span>
+      <span class="font-bold text-brand-cyan">👩‍💼 COMMANDER: XIAOMI</span>
+      <span class="text-slate-500">|</span>
+      <span class="text-[10px] text-slate-400">IEEE Big Data 2026 CHI-Bench</span>
+    </div>
+  </footer>
+
+  <!-- Script for Dynamic Pointer & Virtual Cursor Movement -->
+  <script>
+    function moveCursorTo(targetSelector, labelText, callback) {
+      const el = document.querySelector(targetSelector);
+      const cursor = document.getElementById('virtual-cursor');
+      const label = document.getElementById('virtual-cursor-label');
+      if (!el || !cursor) return;
+
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
+      if (label && labelText) label.innerText = labelText;
+
+      document.querySelectorAll('.focus-target-active').forEach(e => e.classList.remove('focus-target-active'));
+      el.classList.add('focus-target-active');
+
+      if (callback) setTimeout(callback, 300);
+    }
+  </script>
+</body>
+</html>
