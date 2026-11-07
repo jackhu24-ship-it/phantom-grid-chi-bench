@@ -9,6 +9,7 @@
 **Benchmark Portal:** https://actava.ai/benchmarks/chi-bench  
 **Live Leaderboard:** https://actava.ai/benchmarks/leaderboards  
 **Submission Portal:** https://actava.ai/benchmarks/submit  
+**Official Pull Request:** https://github.com/actava-ai/leaderboard/pull/36
 **License:** Apache 2.0  
 
 ---
