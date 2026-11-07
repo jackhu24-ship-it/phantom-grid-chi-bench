@@ -1,12 +1,13 @@
 tournament_id: 202611_IEEE_BigData_CHI_Bench
 title: 'IEEE Big Data Cup 2026 Challenge 07: CHI-Bench (χ-Bench)'
-subtitle: Can AI Agents Automate End-to-End, Long-Horizon, Policy-Rich Healthcare
-  Workflows?
-platform: Kaggle & Actava AI Leaderboard
+subtitle: Can AI Agents Automate End-to-End, Long-Horizon, Policy-Rich Healthcare Workflows?
+platform: Actava AI Leaderboard & IEEE Big Data Cup 2026
 competition_slug: chi-bench
-url: https://www.kaggle.com/competitions/chi-bench
+url: https://actava.ai/benchmarks/chi-bench
+leaderboard_url: https://actava.ai/benchmarks/leaderboards
+submission_url: https://actava.ai/benchmarks/submit
 github_repo: https://github.com/actava-ai/chi-bench
-prize_pool: ',000 USD'
+prize_pool: '$25,000 USD'
 submission_deadline: '2026-11-15T23:59:00Z'
 team_count: 19
 user_has_entered: true

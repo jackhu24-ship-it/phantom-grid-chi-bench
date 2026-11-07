@@ -3,8 +3,12 @@
 **Project Title:** PHANToM GRID :: Autonomous Sovereign Bio-Edge Agent for Long-Horizon Healthcare Workflows  
 **Challenge:** IEEE Big Data Cup 2026 Challenge 07: χ-Bench (CHI-Bench)  
 **Participant:** Jack Hu (HU JIUN REN, Principal Architect)  
+**Commander:** Commander Xiaomi  
 **Contact:** jackhu24@gmail.com  
 **Repository:** https://github.com/jackhu24-ship-it/phantom-grid-chi-bench  
+**Benchmark Portal:** https://actava.ai/benchmarks/chi-bench  
+**Live Leaderboard:** https://actava.ai/benchmarks/leaderboards  
+**Submission Portal:** https://actava.ai/benchmarks/submit  
 **License:** Apache 2.0  
 
 ---
@@ -34,3 +38,12 @@ git clone https://github.com/jackhu24-ship-it/phantom-grid-chi-bench.git && cd p
 pip install -r 02_SourceCode/requirements.txt
 python 02_SourceCode/runner.py --domain all --trials 3 --json-receipt
 ```
+
+---
+
+## 4. Leaderboard & Artifact Links
+- **GitHub Repository (10 Drawers Full Parity):** https://github.com/jackhu24-ship-it/phantom-grid-chi-bench
+- **Official Deck (PDF):** `04_Slides_PDF/PHANToM_GRID_IEEE_BigData_CHI_Bench_Official_Deck.pdf`
+- **Hollywood 1440P Demo Video:** `05_DemoVideo_1440P/demo_video_1440p.mp4`
+- **Interactive Live App Telemetry:** `06_LiveApp/index.html`
+- **Architect Contact:** Jack Hu (jackhu24@gmail.com)
